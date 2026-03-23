@@ -166,6 +166,7 @@ const DEFAULT=[
   {id:34,title:'Auditoria geral de duplicidades no sistema',desc:'Varrer Pedidos, Metas e Notas Fiscais em busca de registros duplicados. Verificar se o problema de double submit afeta outros módulos além de pedidos SALDO. Criar validação de unicidade no backend para os campos-chave de cada entidade.',module:'Geral',tag:'urgente',col:'alta',open:false},
 
   // ─── MÉDIA: melhorias importantes pro dia a dia ────────────────────────────
+  {id:35,title:'Botão de excluir pedido',desc:'Adicionar opção de exclusão na tela de Pedidos com modal de confirmação. Implementar soft delete no backend (deleted: true) para preservar histórico. Regras: só admin pode excluir, pedido com NF vinculada não pode ser excluído, registrar log com usuário e timestamp.',module:'Pedidos',tag:'melhoria',col:'media',open:false},
   {id:5,title:'Paginação na tabela de Pedidos',desc:'Todos os registros carregados de uma vez. Pode impactar performance com volume alto.',module:'Pedidos',tag:'performance',col:'media',open:false},
   {id:6,title:'Paginação na lista de Usuários',desc:'Mesmo problema da tabela de Pedidos — sem paginação.',module:'Auth',tag:'performance',col:'media',open:false},
   {id:8,title:'Tela de cold start amigável',desc:'Exibir "aguarde, sistema iniciando..." ao invés de parecer erro durante o cold start do Render free tier.',module:'Infra',tag:'ux',col:'media',open:false},
