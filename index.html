@@ -7,7 +7,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    :root{--bg:#0C0F0A;--surface:#141710;--surface2:#1C2018;--border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.12);--green:#7EE8A2;--green-dim:rgba(126,232,162,0.12);--green-dim2:rgba(126,232,162,0.2);--text:#F0F2EC;--text2:#8A9080;--text3:#5A6052;--orange:#FFAA5A;--orange-dim:rgba(255,170,90,0.12);--blue:#7AB8F5;--blue-dim:rgba(122,184,245,0.12);--red:#F5827A;--red-dim:rgba(245,130,122,0.12);--purple:#C4A8F5;--purple-dim:rgba(196,168,245,0.12);--teal:#7AF5E0;--teal-dim:rgba(122,245,224,0.12)}
+    :root{--bg:#0C0F0A;--surface:#141710;--surface2:#1C2018;--border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.12);--green:#7EE8A2;--green-dim:rgba(126,232,162,0.12);--green-dim2:rgba(126,232,162,0.2);--text:#F0F2EC;--text2:#8A9080;--text3:#5A6052;--orange:#FFAA5A;--orange-dim:rgba(255,170,90,0.12);--blue:#7AB8F5;--blue-dim:rgba(122,184,245,0.12);--red:#F5827A;--red-dim:rgba(245,130,122,0.12);--purple:#C4A8F5;--purple-dim:rgba(196,168,245,0.12);--teal:#7AF5E0;--teal-dim:rgba(122,245,224,0.12);--yellow:#F5E27A;--yellow-dim:rgba(245,226,122,0.12)}
     html{scroll-behavior:smooth}
     body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
     header{position:relative;z-index:10;padding:40px 5% 32px;border-bottom:1px solid var(--border);display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:16px}
@@ -26,14 +26,20 @@
     .board-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:12px}
     .board-title{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text3)}
     .btn-add{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;color:var(--green);background:var(--green-dim);border:1px solid rgba(126,232,162,0.2);padding:8px 18px;border-radius:8px;cursor:pointer}
-    .columns{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
-    @media(max-width:768px){.columns{grid-template-columns:1fr}}
+    .columns{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px}
+    @media(max-width:1100px){.columns{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:600px){.columns{grid-template-columns:1fr}}
     .col{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px;min-height:300px}
+    .col-alta{border-top:2px solid var(--red)}
+    .col-media{border-top:2px solid var(--yellow)}
+    .col-baixa{border-top:2px solid var(--blue)}
+    .col-done{border-top:2px solid var(--green)}
     .col-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
     .col-name{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text3)}
     .col-badge{font-size:11px;padding:2px 9px;border-radius:20px;font-weight:500}
-    .col-badge-todo{background:var(--orange-dim);color:var(--orange)}
-    .col-badge-doing{background:var(--blue-dim);color:var(--blue)}
+    .col-badge-alta{background:var(--red-dim);color:var(--red)}
+    .col-badge-media{background:var(--yellow-dim);color:var(--yellow)}
+    .col-badge-baixa{background:var(--blue-dim);color:var(--blue)}
     .col-badge-done{background:var(--green-dim);color:var(--green)}
     .col-divider{height:1px;background:var(--border);margin-bottom:14px}
     .card{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:10px;cursor:pointer;transition:border-color 0.2s,background 0.2s;animation:cardIn 0.3s ease both}
@@ -57,6 +63,7 @@
     .card-actions{display:flex;gap:6px;flex-wrap:wrap}
     .btn-action{font-family:'DM Sans',sans-serif;font-size:11px;padding:4px 10px;border-radius:6px;cursor:pointer;border:1px solid var(--border2);background:transparent;color:var(--text2)}
     .btn-action.danger{color:var(--red);border-color:rgba(245,130,122,0.2)}
+    .btn-action.done-btn{color:var(--green);border-color:rgba(126,232,162,0.25)}
     .empty-col{font-size:12px;color:var(--text3);text-align:center;padding:32px 0;border:1px dashed var(--border);border-radius:8px}
     .overlay{display:none;position:fixed;inset:0;z-index:100;background:rgba(0,0,0,0.7);backdrop-filter:blur(4px);align-items:center;justify-content:center;padding:1rem}
     .overlay.open{display:flex}
@@ -88,41 +95,49 @@
   <button class="btn-add" onclick="openModal()">+ Nova tarefa</button>
 </header>
 <div class="stats-bar">
-  <div class="stat-item"><div class="stat-num" id="stat-total">—</div><div class="stat-label">Total</div></div>
-  <div class="stat-item"><div class="stat-num" id="stat-todo" style="color:var(--orange)">—</div><div class="stat-label">A fazer</div></div>
-  <div class="stat-item"><div class="stat-num" id="stat-doing" style="color:var(--blue)">—</div><div class="stat-label">Em progresso</div></div>
-  <div class="stat-item"><div class="stat-num" id="stat-done" style="color:var(--green)">—</div><div class="stat-label">Concluído</div></div>
+  <div class="stat-item"><div class="stat-num" id="stat-total">-</div><div class="stat-label">Total</div></div>
+  <div class="stat-item"><div class="stat-num" id="stat-alta" style="color:var(--red)">-</div><div class="stat-label">Alta</div></div>
+  <div class="stat-item"><div class="stat-num" id="stat-media" style="color:var(--yellow)">-</div><div class="stat-label">Media</div></div>
+  <div class="stat-item"><div class="stat-num" id="stat-baixa" style="color:var(--blue)">-</div><div class="stat-label">Baixa</div></div>
+  <div class="stat-item"><div class="stat-num" id="stat-done" style="color:var(--green)">-</div><div class="stat-label">Feito</div></div>
 </div>
 <main>
-  <div class="board-header"><span class="board-title">Tarefas & melhorias</span></div>
+  <div class="board-header"><span class="board-title">Tarefas e melhorias - por prioridade</span></div>
   <div class="columns" id="board"></div>
 </main>
 <footer>
-  <span class="footer-text">RepFlow — Uso pessoal · <span>Rubens Bandeira</span></span>
-  <span class="footer-text">Feito em Recife, PE 🌿</span>
+  <span class="footer-text">RepFlow - Uso pessoal e SaaS - <span>Rubens Bandeira</span></span>
+  <span class="footer-text">Feito em Recife, PE</span>
 </footer>
 <div class="overlay" id="overlay">
   <div class="modal">
     <div class="modal-title">Nova tarefa</div>
-    <div class="form-row"><label>Título</label><input type="text" id="f-title" placeholder="Ex: Cadastro de Representadas" /></div>
-    <div class="form-row"><label>Descrição</label><textarea id="f-desc" placeholder="Detalhes, contexto..."></textarea></div>
-    <div class="form-row"><label>Módulo</label>
+    <div class="form-row"><label>Titulo</label><input type="text" id="f-title" placeholder="Ex: Cadastro de Representadas" /></div>
+    <div class="form-row"><label>Descricao</label><textarea id="f-desc" placeholder="Detalhes, contexto..."></textarea></div>
+    <div class="form-row"><label>Modulo</label>
       <select id="f-module">
         <option value="Pedidos">Pedidos</option><option value="Dashboard">Dashboard</option>
-        <option value="Comissões">Comissões</option><option value="Metas">Metas</option>
+        <option value="Comissoes">Comissoes</option><option value="Metas">Metas</option>
         <option value="Clientes">Clientes</option><option value="Materiais">Materiais</option>
         <option value="Representadas">Representadas</option>
-        <option value="NF">Notas Fiscais</option><option value="Auth">Auth / Segurança</option>
-        <option value="Infra">Infra</option><option value="IA">IA & Alertas</option>
+        <option value="NF">Notas Fiscais</option><option value="Auth">Auth / Seguranca</option>
+        <option value="Infra">Infra</option><option value="IA">IA e Alertas</option>
         <option value="Geral">Geral</option>
       </select>
     </div>
     <div class="form-row"><label>Categoria</label>
       <select id="f-tag">
         <option value="melhoria">Melhoria</option><option value="urgente">Urgente</option>
-        <option value="seguranca">Segurança</option><option value="performance">Performance</option>
-        <option value="ux">UX</option><option value="integracao">Integração</option>
+        <option value="seguranca">Seguranca</option><option value="performance">Performance</option>
+        <option value="ux">UX</option><option value="integracao">Integracao</option>
         <option value="arquitetura">Arquitetura</option><option value="ia">IA</option>
+      </select>
+    </div>
+    <div class="form-row"><label>Prioridade</label>
+      <select id="f-priority">
+        <option value="alta">Alta - afeta o uso diario</option>
+        <option value="media">Media - melhoria importante</option>
+        <option value="baixa">Baixa - futuro / SaaS</option>
       </select>
     </div>
     <div class="modal-footer">
@@ -133,87 +148,115 @@
 </div>
 <div class="toast" id="toast"></div>
 <script>
-const COLS=['A fazer','Em progresso','Feito'],COL_IDS=['todo','doing','done'],KEY='repflow-roadmap-v5';
+const COLS=['Alta Prioridade','Media Prioridade','Baixa Prioridade','Feito'];
+const COL_IDS=['alta','media','baixa','done'];
+const COL_CLASSES=['col-alta','col-media','col-baixa','col-done'];
+const BADGE_CLASSES=['col-badge-alta','col-badge-media','col-badge-baixa','col-badge-done'];
+const KEY='repflow-roadmap-v8';
 const DEFAULT=[
-  // BUGS URGENTES
-  {id:37,title:'Faturado no mes divergente: Dashboard x Notas Fiscais',desc:'Dashboard somava pedido.valor_total em vez de nota.valor_total. Corrigido para usar o valor real da NF como fonte de verdade.',module:'Dashboard',tag:'urgente',col:'done',open:false},
-  {id:1,title:'Trocar senha padrão do admin',desc:'A variável TroqueEssaSenha@2026 precisa ser rotacionada em produção imediatamente.',module:'Auth',tag:'seguranca',col:'todo',open:false},
-  {id:2,title:'Logo duplicada na tela de login',desc:'Tela de login exibe duas logos empilhadas — uma menor em cima e uma maior embaixo.',module:'Geral',tag:'urgente',col:'todo',open:false},
-  {id:3,title:'Valor fantasma de R$ 895,39 no Dashboard',desc:'Valor aparecendo no "a receber" sem origem identificada. Verificar cálculo de comissões pendentes.',module:'Dashboard',tag:'urgente',col:'todo',open:false},
-  {id:4,title:'Divergência de tonelagem: Metas x Dashboard',desc:'Metas exibe 74,47 ton realizado, Dashboard exibe apenas 66,10 ton. Provável problema de competência fiscal.',module:'Dashboard',tag:'urgente',col:'todo',open:false},
-  // PERFORMANCE
-  {id:5,title:'Paginação na tabela de Pedidos',desc:'Todos os registros carregados de uma vez. Pode impactar performance com volume alto.',module:'Pedidos',tag:'performance',col:'todo',open:false},
-  {id:6,title:'Paginação na lista de Usuários',desc:'Mesmo problema da tabela de Pedidos — sem paginação.',module:'Auth',tag:'performance',col:'todo',open:false},
-  {id:7,title:'Mover lógica de status ATRASADO para o backend',desc:'Atualmente calculado no cliente — risco de inconsistência se a lógica de datas divergir.',module:'Pedidos',tag:'melhoria',col:'todo',open:false},
-  // UX
-  {id:8,title:'Tela de cold start amigável',desc:'Exibir "aguarde, sistema iniciando..." ao invés de parecer erro durante o cold start do Render free tier.',module:'Infra',tag:'ux',col:'todo',open:false},
-  {id:9,title:'Upgrade do Render para plano pago',desc:'Cold start de ~30s no free tier prejudica a experiência. Render pago (~$7/mês) elimina o problema.',module:'Infra',tag:'ux',col:'todo',open:false},
-  {id:10,title:'Nome fantasia nos clientes',desc:'Exibir nome fantasia como identificação principal, mantendo razão social salva.',module:'Clientes',tag:'ux',col:'todo',open:false},
-  // FUNCIONALIDADES
-  {id:11,title:'Exportar pedidos em PDF por período',desc:'Opção de imprimir/exportar PDF dos pedidos ao selecionar intervalo de datas.',module:'Pedidos',tag:'melhoria',col:'todo',open:false},
-  {id:12,title:'Exportar comissões em PDF',desc:'Além do Excel já existente, adicionar exportação em PDF para impressão do relatório de comissões.',module:'Comissões',tag:'melhoria',col:'todo',open:false},
-  {id:13,title:'Leitura de NF pela câmera',desc:'Ler a chave de acesso da DANFE pela câmera do celular. Ao identificar o CNPJ, filtrar automaticamente os pedidos do cliente para vincular à NF.',module:'NF',tag:'melhoria',col:'todo',open:false},
-  {id:14,title:'Match automático produto NF x catálogo',desc:'Ao ler a NF, fazer match do código do produto (ex: 271031200) com o catálogo interno ignorando sufixos -cx/-ch/-sawer.',module:'NF',tag:'melhoria',col:'todo',open:false},
-  {id:15,title:'Dimensões no cadastro de materiais',desc:'Adicionar campos de comprimento, largura e altura interna no cadastro de produtos do catálogo FE.',module:'Materiais',tag:'melhoria',col:'todo',open:false},
-  {id:16,title:'Qualidade/gramatura no cadastro de materiais',desc:'Adicionar campo de qualidade/gramatura (ex: 739 PB2C1M45). Informação muito consultada pelo representante em campo.',module:'Materiais',tag:'melhoria',col:'todo',open:false},
-  {id:17,title:'Histórico de pedidos na ficha do cliente',desc:'Exibir todos os pedidos anteriores, frequência de compra e data da última compra dentro da ficha do cliente.',module:'Clientes',tag:'melhoria',col:'todo',open:false},
-  {id:18,title:'Alerta de clientes inativos no Dashboard',desc:'Destacar no dashboard clientes que não compram há X dias configuráveis.',module:'Dashboard',tag:'melhoria',col:'todo',open:false},
-  {id:19,title:'Export geral dos dados (backup)',desc:'Garantir que o usuário consegue exportar todos os seus dados antes de virar multi-tenant.',module:'Geral',tag:'seguranca',col:'todo',open:false},
-  // REPRESENTADAS
-  {id:26,title:'Cadastro de Representadas',desc:'Criar módulo de Representadas como entidade própria: nome, CNPJ, contato, % comissão padrão e categoria de produto (papelão, fitas, sacos etc.). Cada pedido e material será vinculado a uma representada.',module:'Representadas',tag:'arquitetura',col:'todo',open:false},
-  {id:27,title:'Motor de cálculo dinâmico por categoria',desc:'O sistema identifica a categoria do produto e aplica o cálculo correto automaticamente: Papelão → tonelagem. Fitas/sacos/fitilhos → unidade, milhar ou rolo. O "chip" troca sozinho sem poluir a interface.',module:'Representadas',tag:'arquitetura',col:'todo',open:false},
-  {id:28,title:'Relatórios e comissões separados por representada',desc:'Filtrar pedidos, metas e comissões por representada. Dashboard mostra o bolo total consolidado, mas o representante abre cada pasta separadamente para prestar contas.',module:'Representadas',tag:'melhoria',col:'todo',open:false},
-  // IA & ALERTAS
-  {id:20,title:'IA — Resumo diário de entregas (7h)',desc:'Todo dia às 7h, enviar mensagem via WhatsApp ou e-mail com quantos pedidos têm entrega prevista para o dia. Ex: "Bom dia Rubens, você tem 3 pedidos para entregar hoje."',module:'IA',tag:'ia',col:'todo',open:false},
-  {id:21,title:'IA — Alerta de clientes sem pedido há X dias',desc:'Notificar quando um cliente está há X dias (configurável) sem realizar pedido. Ex: "Copobras está há 45 dias sem pedido — que tal uma ligada?"',module:'IA',tag:'ia',col:'todo',open:false},
-  {id:22,title:'IA — Alerta de ritmo de metas',desc:'Notificar quando o ritmo está abaixo do necessário para bater a meta do mês. Ex: "Faltam 8 dias para fechar agosto e você está a 20% da meta. Você precisa de X ton nos próximos 8 dias."',module:'IA',tag:'ia',col:'todo',open:false},
-  // BLINDAGEM & INFRAESTRUTURA
-  {id:29,title:'RLS — Isolamento total de dados por tenant',desc:'Garantir via Row Level Security que o Representante A jamais acesse os dados do Representante B. Argumento de venda: "uso a mesma tecnologia de segurança de bancos para proteger sua carteira de clientes."',module:'Infra',tag:'seguranca',col:'todo',open:false},
-  {id:30,title:'Mover regras de comissão para o servidor',desc:'Isolar a lógica de cálculo de comissão e preços em funções de servidor (backend FastAPI), impedindo que alguém manipule valores pelo console do navegador.',module:'Infra',tag:'seguranca',col:'todo',open:false},
-  {id:31,title:'Validação de webhooks de pagamento (Stripe)',desc:'Configurar verificação de assinatura digital nos webhooks do Stripe. O sistema só libera o acesso do assinante após confirmação real do pagamento pelo banco — sem brecha para acesso indevido.',module:'Infra',tag:'seguranca',col:'todo',open:false},
-  {id:32,title:'Rate limiting nas rotas de IA',desc:'Limitar requisições nas rotas que consomem créditos de IA para evitar gastos surpresa na fatura. Configurar por usuário/tenant com alertas de uso próximo ao limite.',module:'IA',tag:'seguranca',col:'todo',open:false},
-  // SAAS / ARQUITETURA
-  {id:23,title:'Multi-tenancy — transformar em SaaS',desc:'Cada representante assinante terá seu próprio espaço isolado via tenant_id em todas as collections do MongoDB. Você vira o primeiro cliente pagante. Auth JWT já existe — foco é no isolamento de dados.',module:'Infra',tag:'arquitetura',col:'todo',open:false},
-  {id:24,title:'Onboarding guiado para novos usuários',desc:'Wizard para novos representantes cadastrarem as primeiras representadas e clientes ao entrar pela primeira vez.',module:'Geral',tag:'ux',col:'todo',open:false},
-  {id:25,title:'Perfil Gerente de Equipe',desc:'Terceiro nível de acesso além de admin e vendedor. O gerente vê tonelagem e comissão consolidada de todos os vendedores do grupo, sem acesso a configurações administrativas.',module:'Auth',tag:'arquitetura',col:'todo',open:false},
+  // ALTA
+  {id:30,title:'Mover regras de comissao para o servidor',desc:'Isolar a logica de calculo de comissao e precos em funcoes de servidor (backend FastAPI), impedindo que alguem manipule valores pelo console do navegador.',module:'Infra',tag:'seguranca',col:'alta',open:false},
+  {id:36,title:'Comissao Realizada no Dashboard com criterio errado',desc:'Card Comissao Realizada soma NFs emitidas no mes em vez de vencimentos com status=Pago. Regra correta: Comissao Realizada = vencimentos Pagos. A Receber = vencimentos Pendentes. Corrigir endpoint /api/dashboard/stats no main.py.',module:'Dashboard',tag:'urgente',col:'alta',open:false},
+  // MEDIA
+  {id:35,title:'Botao de excluir pedido',desc:'Adicionar opcao de exclusao na tela de Pedidos com modal de confirmacao. Implementar soft delete no backend (deleted: true) para preservar historico. Regras: so admin pode excluir, pedido com NF vinculada nao pode ser excluido, registrar log com usuario e timestamp.',module:'Pedidos',tag:'melhoria',col:'media',open:false},
+  {id:5,title:'Paginacao na tabela de Pedidos',desc:'Todos os registros carregados de uma vez. Pode impactar performance com volume alto.',module:'Pedidos',tag:'performance',col:'media',open:false},
+  {id:6,title:'Paginacao na lista de Usuarios',desc:'Mesmo problema da tabela de Pedidos - sem paginacao.',module:'Auth',tag:'performance',col:'media',open:false},
+  {id:8,title:'Tela de cold start amigavel',desc:'Exibir aguarde, sistema iniciando... ao inves de parecer erro durante o cold start do Render free tier.',module:'Infra',tag:'ux',col:'media',open:false},
+  {id:9,title:'Upgrade do Render para plano pago',desc:'Cold start de ~30s no free tier prejudica a experiencia. Render pago (~$7/mes) elimina o problema.',module:'Infra',tag:'ux',col:'media',open:false},
+  {id:10,title:'Nome fantasia nos clientes',desc:'Exibir nome fantasia como identificacao principal, mantendo razao social salva.',module:'Clientes',tag:'ux',col:'media',open:false},
+  {id:11,title:'Exportar pedidos em PDF por periodo',desc:'Opcao de imprimir/exportar PDF dos pedidos ao selecionar intervalo de datas.',module:'Pedidos',tag:'melhoria',col:'media',open:false},
+  {id:12,title:'Exportar comissoes em PDF',desc:'Alem do Excel ja existente, adicionar exportacao em PDF para impressao do relatorio de comissoes.',module:'Comissoes',tag:'melhoria',col:'media',open:false},
+  {id:13,title:'Leitura de NF pela camera',desc:'Ler a chave de acesso da DANFE pela camera do celular. Ao identificar o CNPJ, filtrar automaticamente os pedidos do cliente para vincular a NF.',module:'NF',tag:'melhoria',col:'media',open:false},
+  {id:14,title:'Match automatico produto NF x catalogo',desc:'Ao ler a NF, fazer match do codigo do produto com o catalogo interno ignorando sufixos -cx/-ch/-sawer.',module:'NF',tag:'melhoria',col:'media',open:false},
+  {id:15,title:'Dimensoes no cadastro de materiais',desc:'Adicionar campos de comprimento, largura e altura interna no cadastro de produtos do catalogo FE.',module:'Materiais',tag:'melhoria',col:'media',open:false},
+  {id:16,title:'Qualidade/gramatura no cadastro de materiais',desc:'Adicionar campo de qualidade/gramatura (ex: 739 PB2C1M45). Informacao muito consultada pelo representante em campo.',module:'Materiais',tag:'melhoria',col:'media',open:false},
+  {id:17,title:'Historico de pedidos na ficha do cliente',desc:'Exibir todos os pedidos anteriores, frequencia de compra e data da ultima compra dentro da ficha do cliente.',module:'Clientes',tag:'melhoria',col:'media',open:false},
+  {id:18,title:'Alerta de clientes inativos no Dashboard',desc:'Destacar no dashboard clientes que nao compram ha X dias configuraveis.',module:'Dashboard',tag:'melhoria',col:'media',open:false},
+  {id:19,title:'Export geral dos dados (backup)',desc:'Garantir que o usuario consegue exportar todos os seus dados antes de virar multi-tenant.',module:'Geral',tag:'seguranca',col:'media',open:false},
+  // BAIXA
+  {id:26,title:'Cadastro de Representadas',desc:'Criar modulo de Representadas como entidade propria: nome, CNPJ, contato, % comissao padrao e categoria de produto. Cada pedido e material sera vinculado a uma representada.',module:'Representadas',tag:'arquitetura',col:'baixa',open:false},
+  {id:27,title:'Motor de calculo dinamico por categoria',desc:'O sistema identifica a categoria do produto e aplica o calculo correto automaticamente: Papelao -> tonelagem. Fitas/sacos/fitilhos -> unidade, milhar ou rolo.',module:'Representadas',tag:'arquitetura',col:'baixa',open:false},
+  {id:28,title:'Relatorios e comissoes separados por representada',desc:'Filtrar pedidos, metas e comissoes por representada.',module:'Representadas',tag:'melhoria',col:'baixa',open:false},
+  {id:20,title:'IA - Resumo diario de entregas (7h)',desc:'Todo dia as 7h, enviar mensagem via WhatsApp ou e-mail com quantos pedidos tem entrega prevista para o dia.',module:'IA',tag:'ia',col:'baixa',open:false},
+  {id:21,title:'IA - Alerta de clientes sem pedido ha X dias',desc:'Notificar quando um cliente esta ha X dias (configuravel) sem realizar pedido.',module:'IA',tag:'ia',col:'baixa',open:false},
+  {id:22,title:'IA - Alerta de ritmo de metas',desc:'Notificar quando o ritmo esta abaixo do necessario para bater a meta do mes.',module:'IA',tag:'ia',col:'baixa',open:false},
+  {id:29,title:'RLS - Isolamento total de dados por tenant',desc:'Garantir via Row Level Security que o Representante A jamais acesse os dados do Representante B.',module:'Infra',tag:'seguranca',col:'baixa',open:false},
+  {id:31,title:'Validacao de webhooks de pagamento (Stripe)',desc:'Configurar verificacao de assinatura digital nos webhooks do Stripe.',module:'Infra',tag:'seguranca',col:'baixa',open:false},
+  {id:32,title:'Rate limiting nas rotas de IA',desc:'Limitar requisicoes nas rotas que consomem creditos de IA para evitar gastos surpresa na fatura.',module:'IA',tag:'seguranca',col:'baixa',open:false},
+  {id:23,title:'Multi-tenancy - transformar em SaaS',desc:'Cada representante assinante tera seu proprio espaco isolado via tenant_id em todas as collections do MongoDB.',module:'Infra',tag:'arquitetura',col:'baixa',open:false},
+  {id:24,title:'Onboarding guiado para novos usuarios',desc:'Wizard para novos representantes cadastrarem as primeiras representadas e clientes ao entrar pela primeira vez.',module:'Geral',tag:'ux',col:'baixa',open:false},
+  {id:25,title:'Perfil Gerente de Equipe',desc:'Terceiro nivel de acesso alem de admin e vendedor. O gerente ve tonelagem e comissao consolidada de todos os vendedores do grupo.',module:'Auth',tag:'arquitetura',col:'baixa',open:false},
+  // FEITO
+  {id:1,title:'Trocar senha padrao do admin',desc:'Senha rotacionada no Render (ADMIN_PASSWORD e SECRET_KEY).',module:'Auth',tag:'seguranca',col:'done',open:false},
+  {id:2,title:'Logo duplicada na tela de login',desc:'Dois blocos de logo no Login.js. Bloco duplicado removido.',module:'Geral',tag:'urgente',col:'done',open:false},
+  {id:3,title:'A Receber negativo no Dashboard',desc:'Formula comissao_prevista - comissao_realizada gerava valor negativo. Corrigido para somar vencimentos com status != Pago.',module:'Dashboard',tag:'urgente',col:'done',open:false},
+  {id:4,title:'Divergencia de tonelagem: Metas x Dashboard',desc:'Metas usava criado_em como fallback e nao deduplicava pedidos. Dashboard cortava no dia atual. Ambos corrigidos.',module:'Dashboard',tag:'urgente',col:'done',open:false},
+  {id:7,title:'Mover logica de status ATRASADO para o backend',desc:'_resolve_status implementada no main.py. Frontend agora exibe o status vindo do backend.',module:'Pedidos',tag:'melhoria',col:'done',open:false},
+  {id:33,title:'Double submit ao criar pedido SALDO',desc:'Botao sem estado de loading. Corrigido com disable no frontend e verificacao de idempotencia (HTTP 409) no backend.',module:'Pedidos',tag:'urgente',col:'done',open:false},
+  {id:34,title:'Auditoria geral de duplicidades no sistema',desc:'Double submit identificado em NotasFiscais.js. Corrigido com estado submitting e validacao de numero_nf unico no backend.',module:'Geral',tag:'urgente',col:'done',open:false},
 ];
-let state={cards:[],nextId:60,updated:null};
+let state={cards:[],nextId:70,updated:null};
 function load(){try{const r=localStorage.getItem(KEY);if(r){state=JSON.parse(r);}else{state.cards=DEFAULT;save(false);}}catch(e){state.cards=DEFAULT;}render();}
 function save(n=true){state.updated=new Date().toISOString();localStorage.setItem(KEY,JSON.stringify(state));updateMeta();if(n)toast('Salvo');}
 function updateMeta(){
   const el=document.getElementById('last-updated');
-  if(state.updated){const d=new Date(state.updated);el.textContent='Atualizado em '+d.toLocaleDateString('pt-BR')+' às '+d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});}
+  if(state.updated){const d=new Date(state.updated);el.textContent='Atualizado em '+d.toLocaleDateString('pt-BR')+' as '+d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});}
   document.getElementById('stat-total').textContent=state.cards.length;
-  document.getElementById('stat-todo').textContent=state.cards.filter(c=>c.col==='todo').length;
-  document.getElementById('stat-doing').textContent=state.cards.filter(c=>c.col==='doing').length;
+  document.getElementById('stat-alta').textContent=state.cards.filter(c=>c.col==='alta').length;
+  document.getElementById('stat-media').textContent=state.cards.filter(c=>c.col==='media').length;
+  document.getElementById('stat-baixa').textContent=state.cards.filter(c=>c.col==='baixa').length;
   document.getElementById('stat-done').textContent=state.cards.filter(c=>c.col==='done').length;
 }
 function render(){
   const board=document.getElementById('board');board.innerHTML='';
   COL_IDS.forEach((colId,i)=>{
     const cc=state.cards.filter(c=>c.col===colId);
-    const bc=['col-badge-todo','col-badge-doing','col-badge-done'][i];
-    const col=document.createElement('div');col.className='col';
-    col.innerHTML='<div class="col-header"><span class="col-name">'+COLS[i]+'</span><span class="col-badge '+bc+'">'+cc.length+'</span></div><div class="col-divider"></div>'+
+    const col=document.createElement('div');col.className='col '+COL_CLASSES[i];
+    col.innerHTML='<div class="col-header"><span class="col-name">'+COLS[i]+'</span><span class="col-badge '+BADGE_CLASSES[i]+'">'+cc.length+'</span></div><div class="col-divider"></div>'+
     (cc.length===0?'<div class="empty-col">Nenhuma tarefa aqui</div>':cc.map(c=>
       '<div class="card" onclick="toggle('+c.id+')"><div class="card-title">'+c.title+'</div>'+
       '<div class="card-meta"><span class="tag tag-'+c.tag+'">'+c.tag+'</span><span class="card-module">'+c.module+'</span></div>'+
       '<div class="card-body '+(c.open?'open':'')+'">'+
       (c.desc?'<div class="card-desc">'+c.desc+'</div>':'')+
       '<div class="card-actions">'+
-      (colId!=='todo'?'<button class="btn-action" onclick="move(event,'+c.id+',\'prev\')">← Voltar</button>':'')+
-      (colId!=='done'?'<button class="btn-action" onclick="move(event,'+c.id+',\'next\')">Avançar →</button>':'')+
+      (colId!=='alta'?'<button class="btn-action" onclick="move(event,'+c.id+',\'prev\')">Subir prioridade</button>':'')+
+      (colId!=='done'?'<button class="btn-action" onclick="move(event,'+c.id+',\'next\')">Baixar prioridade</button>':'')+
+      (colId!=='done'?'<button class="btn-action done-btn" onclick="markDone(event,'+c.id+')">Concluir</button>':'')+
       '<button class="btn-action danger" onclick="remove(event,'+c.id+')">Remover</button>'+
       '</div></div></div>').join(''));
     board.appendChild(col);
   });updateMeta();
 }
 function toggle(id){state.cards=state.cards.map(c=>c.id===id?{...c,open:!c.open}:c);render();}
-function move(e,id,dir){e.stopPropagation();const idx=COL_IDS.indexOf(state.cards.find(c=>c.id===id).col);const ni=dir==='next'?idx+1:idx-1;if(ni<0||ni>=COL_IDS.length)return;state.cards=state.cards.map(c=>c.id===id?{...c,col:COL_IDS[ni],open:false}:c);render();save();}
-function remove(e,id){e.stopPropagation();if(!confirm('Remover esta tarefa?'))return;state.cards=state.cards.filter(c=>c.id!==id);render();save();}
+function move(e,id,dir){
+  e.stopPropagation();
+  const idx=COL_IDS.indexOf(state.cards.find(c=>c.id===id).col);
+  let ni=dir==='next'?idx+1:idx-1;
+  if(ni<0)return;
+  if(ni===3&&dir==='next')return;
+  if(ni>=COL_IDS.length)return;
+  state.cards=state.cards.map(c=>c.id===id?{...c,col:COL_IDS[ni],open:false}:c);
+  render();save();
+}
+function markDone(e,id){
+  e.stopPropagation();
+  state.cards=state.cards.map(c=>c.id===id?{...c,col:'done',open:false}:c);
+  render();save();toast('Concluido!');
+}
+function remove(e,id){
+  e.stopPropagation();
+  if(!confirm('Remover esta tarefa?'))return;
+  state.cards=state.cards.filter(c=>c.id!==id);
+  render();save();
+}
 function openModal(){document.getElementById('overlay').classList.add('open');}
 function closeModal(){document.getElementById('overlay').classList.remove('open');document.getElementById('f-title').value='';document.getElementById('f-desc').value='';}
-function addCard(){const t=document.getElementById('f-title').value.trim();if(!t)return;state.cards.push({id:state.nextId++,title:t,desc:document.getElementById('f-desc').value.trim(),module:document.getElementById('f-module').value,tag:document.getElementById('f-tag').value,col:'todo',open:false});closeModal();render();save();}
+function addCard(){
+  const t=document.getElementById('f-title').value.trim();
+  if(!t)return;
+  state.cards.push({id:state.nextId++,title:t,desc:document.getElementById('f-desc').value.trim(),module:document.getElementById('f-module').value,tag:document.getElementById('f-tag').value,col:document.getElementById('f-priority').value,open:false});
+  closeModal();render();save();
+}
 let tt;function toast(msg){const el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>el.classList.remove('show'),2000);}
 load();
 </script>
