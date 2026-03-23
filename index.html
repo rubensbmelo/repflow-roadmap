@@ -152,18 +152,18 @@ const COLS=['🔴 Alta Prioridade','🟡 Média Prioridade','🔵 Baixa Priorida
 const COL_IDS=['alta','media','baixa','done'];
 const COL_CLASSES=['col-alta','col-media','col-baixa','col-done'];
 const BADGE_CLASSES=['col-badge-alta','col-badge-media','col-badge-baixa','col-badge-done'];
-const KEY='repflow-roadmap-v6';
+const KEY='repflow-roadmap-v7';
 
 const DEFAULT=[
   // ─── ALTA: bugs e problemas que afetam o uso diário ───────────────────────
   {id:1,title:'Trocar senha padrão do admin',desc:'A variável TroqueEssaSenha@2026 precisa ser rotacionada em produção imediatamente.',module:'Auth',tag:'seguranca',col:'alta',open:false},
-  {id:2,title:'Logo duplicada na tela de login',desc:'Tela de login exibe duas logos empilhadas — uma menor em cima e uma maior embaixo.',module:'Geral',tag:'urgente',col:'alta',open:false},
-  {id:3,title:'Valor fantasma de R$ 895,39 no Dashboard',desc:'Valor aparecendo no "a receber" sem origem identificada. Verificar cálculo de comissões pendentes.',module:'Dashboard',tag:'urgente',col:'alta',open:false},
-  {id:4,title:'Divergência de tonelagem: Metas x Dashboard',desc:'Metas exibe 74,47 ton realizado, Dashboard exibe apenas 66,10 ton. Provável problema de competência fiscal.',module:'Dashboard',tag:'urgente',col:'alta',open:false},
+  {id:2,title:'Logo duplicada na tela de login',desc:'Tela de login exibe duas logos empilhadas — uma menor em cima e uma maior embaixo.',module:'Geral',tag:'urgente',col:'done',open:false},
+  {id:3,title:'A Receber negativo no Dashboard',desc:'Fórmula comissao_prevista - comissao_realizada gerava valor negativo quando todos os pedidos do mês já estavam faturados. Corrigido para somar comissão de vencimentos com status != Pago.',module:'Dashboard',tag:'urgente',col:'done',open:false},
+  {id:4,title:'Divergência de tonelagem: Metas x Dashboard',desc:'Metas usava criado_em como fallback e não deduplicava pedidos referenciados por NFs duplicadas. Dashboard cortava no dia atual em vez do fim do mês. Ambos corrigidos.',module:'Dashboard',tag:'urgente',col:'done',open:false},
   {id:7,title:'Mover lógica de status ATRASADO para o backend',desc:'Atualmente calculado no cliente — risco de inconsistência se a lógica de datas divergir.',module:'Pedidos',tag:'melhoria',col:'alta',open:false},
   {id:30,title:'Mover regras de comissão para o servidor',desc:'Isolar a lógica de cálculo de comissão e preços em funções de servidor (backend FastAPI), impedindo que alguém manipule valores pelo console do navegador.',module:'Infra',tag:'seguranca',col:'alta',open:false},
-  {id:33,title:'Double submit ao criar pedido SALDO',desc:'Ao registrar entrega parcial, o botão de criar saldo pode disparar a requisição duas vezes, gerando pedidos duplicados (ex: 58168-S1 apareceu em duplicata). Corrigir com debounce/disable no botão + verificação de idempotência no backend.',module:'Pedidos',tag:'urgente',col:'alta',open:false},
-  {id:34,title:'Auditoria geral de duplicidades no sistema',desc:'Varrer Pedidos, Metas e Notas Fiscais em busca de registros duplicados. Verificar se o problema de double submit afeta outros módulos além de pedidos SALDO. Criar validação de unicidade no backend para os campos-chave de cada entidade.',module:'Geral',tag:'urgente',col:'alta',open:false},
+  {id:33,title:'Double submit ao criar pedido SALDO',desc:'Botão sem estado de loading durante operação async. Corrigido com disable + "Salvando..." no frontend e verificação de idempotência (HTTP 409) no backend.',module:'Pedidos',tag:'urgente',col:'done',open:false},
+  {id:34,title:'Auditoria geral de duplicidades no sistema',desc:'Double submit identificado também em NotasFiscais.js. Corrigido com estado submitting no frontend e validação de numero_nf único no backend.',module:'Geral',tag:'urgente',col:'done',open:false},
 
   // ─── MÉDIA: melhorias importantes pro dia a dia ────────────────────────────
   {id:35,title:'Botão de excluir pedido',desc:'Adicionar opção de exclusão na tela de Pedidos com modal de confirmação. Implementar soft delete no backend (deleted: true) para preservar histórico. Regras: só admin pode excluir, pedido com NF vinculada não pode ser excluído, registrar log com usuário e timestamp.',module:'Pedidos',tag:'melhoria',col:'media',open:false},
