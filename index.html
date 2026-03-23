@@ -105,13 +105,14 @@
 <div class="overlay" id="overlay">
   <div class="modal">
     <div class="modal-title">Nova tarefa</div>
-    <div class="form-row"><label>Título</label><input type="text" id="f-title" placeholder="Ex: Adicionar paginação nos pedidos" /></div>
+    <div class="form-row"><label>Título</label><input type="text" id="f-title" placeholder="Ex: Cadastro de Representadas" /></div>
     <div class="form-row"><label>Descrição</label><textarea id="f-desc" placeholder="Detalhes, contexto..."></textarea></div>
     <div class="form-row"><label>Módulo</label>
       <select id="f-module">
         <option value="Pedidos">Pedidos</option><option value="Dashboard">Dashboard</option>
         <option value="Comissões">Comissões</option><option value="Metas">Metas</option>
         <option value="Clientes">Clientes</option><option value="Materiais">Materiais</option>
+        <option value="Representadas">Representadas</option>
         <option value="NF">Notas Fiscais</option><option value="Auth">Auth / Segurança</option>
         <option value="Infra">Infra</option><option value="IA">IA & Alertas</option>
         <option value="Geral">Geral</option>
@@ -133,18 +134,22 @@
 </div>
 <div class="toast" id="toast"></div>
 <script>
-const COLS=['A fazer','Em progresso','Feito'],COL_IDS=['todo','doing','done'],KEY='repflow-roadmap-v3';
+const COLS=['A fazer','Em progresso','Feito'],COL_IDS=['todo','doing','done'],KEY='repflow-roadmap-v4';
 const DEFAULT=[
+  // BUGS URGENTES
   {id:1,title:'Trocar senha padrão do admin',desc:'A variável TroqueEssaSenha@2026 precisa ser rotacionada em produção imediatamente.',module:'Auth',tag:'seguranca',col:'todo',open:false},
   {id:2,title:'Logo duplicada na tela de login',desc:'Tela de login exibe duas logos empilhadas — uma menor em cima e uma maior embaixo.',module:'Geral',tag:'urgente',col:'todo',open:false},
   {id:3,title:'Valor fantasma de R$ 895,39 no Dashboard',desc:'Valor aparecendo no "a receber" sem origem identificada. Verificar cálculo de comissões pendentes.',module:'Dashboard',tag:'urgente',col:'todo',open:false},
   {id:4,title:'Divergência de tonelagem: Metas x Dashboard',desc:'Metas exibe 74,47 ton realizado, Dashboard exibe apenas 66,10 ton. Provável problema de competência fiscal.',module:'Dashboard',tag:'urgente',col:'todo',open:false},
+  // PERFORMANCE
   {id:5,title:'Paginação na tabela de Pedidos',desc:'Todos os registros carregados de uma vez. Pode impactar performance com volume alto.',module:'Pedidos',tag:'performance',col:'todo',open:false},
   {id:6,title:'Paginação na lista de Usuários',desc:'Mesmo problema da tabela de Pedidos — sem paginação.',module:'Auth',tag:'performance',col:'todo',open:false},
   {id:7,title:'Mover lógica de status ATRASADO para o backend',desc:'Atualmente calculado no cliente — risco de inconsistência se a lógica de datas divergir.',module:'Pedidos',tag:'melhoria',col:'todo',open:false},
+  // UX
   {id:8,title:'Tela de cold start amigável',desc:'Exibir "aguarde, sistema iniciando..." ao invés de parecer erro durante o cold start do Render free tier.',module:'Infra',tag:'ux',col:'todo',open:false},
   {id:9,title:'Upgrade do Render para plano pago',desc:'Cold start de ~30s no free tier prejudica a experiência. Render pago (~$7/mês) elimina o problema.',module:'Infra',tag:'ux',col:'todo',open:false},
   {id:10,title:'Nome fantasia nos clientes',desc:'Exibir nome fantasia como identificação principal, mantendo razão social salva. Melhora a leitura nas listas e pedidos.',module:'Clientes',tag:'ux',col:'todo',open:false},
+  // FUNCIONALIDADES
   {id:11,title:'Exportar pedidos em PDF por período',desc:'Opção de imprimir/exportar PDF dos pedidos ao selecionar intervalo de datas.',module:'Pedidos',tag:'melhoria',col:'todo',open:false},
   {id:12,title:'Exportar comissões em PDF',desc:'Além do Excel já existente, adicionar exportação em PDF para impressão do relatório de comissões.',module:'Comissões',tag:'melhoria',col:'todo',open:false},
   {id:13,title:'Leitura de NF pela câmera',desc:'Ler a chave de acesso da DANFE pela câmera do celular. Ao identificar o CNPJ, filtrar automaticamente os pedidos do cliente para vincular à NF.',module:'NF',tag:'melhoria',col:'todo',open:false},
@@ -154,14 +159,20 @@ const DEFAULT=[
   {id:17,title:'Histórico de pedidos na ficha do cliente',desc:'Exibir todos os pedidos anteriores, frequência de compra e data da última compra dentro da ficha do cliente.',module:'Clientes',tag:'melhoria',col:'todo',open:false},
   {id:18,title:'Alerta de clientes inativos no Dashboard',desc:'Destacar no dashboard clientes que não compram há X dias configuráveis.',module:'Dashboard',tag:'melhoria',col:'todo',open:false},
   {id:19,title:'Export geral dos dados (backup)',desc:'Garantir que o usuário consegue exportar todos os seus dados antes de virar multi-tenant.',module:'Geral',tag:'seguranca',col:'todo',open:false},
+  // REPRESENTADAS — NOVO MÓDULO
+  {id:26,title:'Cadastro de Representadas',desc:'Criar módulo de Representadas como entidade própria: nome, CNPJ, contato, % comissão padrão e categoria de produto (papelão, fitas, sacos etc.). Cada pedido e material será vinculado a uma representada.',module:'Representadas',tag:'arquitetura',col:'todo',open:false},
+  {id:27,title:'Motor de cálculo dinâmico por categoria',desc:'O sistema identifica a categoria do produto e aplica o cálculo correto automaticamente: Papelão → tonelagem (largura x comprimento x gramatura). Fitas/sacos/fitilhos → unidade, milhar ou rolo. Sem poluir a interface — o "chip" troca sozinho.',module:'Representadas',tag:'arquitetura',col:'todo',open:false},
+  {id:28,title:'Relatórios e comissões separados por representada',desc:'Permitir filtrar pedidos, metas e comissões por representada. O dashboard mostra o bolo total consolidado, mas o representante consegue "abrir" cada pasta separadamente para prestar contas.',module:'Representadas',tag:'melhoria',col:'todo',open:false},
+  // IA & ALERTAS
   {id:20,title:'IA — Resumo diário de entregas (7h)',desc:'Todo dia às 7h, enviar mensagem via WhatsApp ou e-mail com quantos pedidos têm entrega prevista para o dia e link direto para o sistema. Ex: "Bom dia Rubens, você tem 3 pedidos para entregar hoje."',module:'IA',tag:'ia',col:'todo',open:false},
   {id:21,title:'IA — Alerta de clientes sem pedido há X dias',desc:'Notificar quando um cliente está há X dias (configurável) sem realizar pedido, sugerindo contato direto. Ex: "Copobras está há 45 dias sem pedido — que tal uma ligada?"',module:'IA',tag:'ia',col:'todo',open:false},
   {id:22,title:'IA — Alerta de ritmo de metas',desc:'Notificar quando o ritmo está abaixo do necessário para bater a meta do mês. Ex: "Faltam 8 dias para fechar agosto e você está a 20% da meta. Você precisa de X ton nos próximos 8 dias."',module:'IA',tag:'ia',col:'todo',open:false},
-  {id:23,title:'Multi-tenancy — transformar em SaaS',desc:'Cada representante assinante terá seu próprio espaço isolado de dados. Você vira o primeiro cliente pagante. Exige mudança de arquitetura no backend.',module:'Infra',tag:'arquitetura',col:'todo',open:false},
+  // SAAS / ARQUITETURA
+  {id:23,title:'Multi-tenancy — transformar em SaaS',desc:'Cada representante assinante terá seu próprio espaço isolado via tenant_id em todas as collections do MongoDB. Você vira o primeiro cliente pagante. Auth JWT já existe — foco é no isolamento de dados.',module:'Infra',tag:'arquitetura',col:'todo',open:false},
   {id:24,title:'Onboarding guiado para novos usuários',desc:'Wizard para novos representantes cadastrarem as primeiras representadas e clientes ao entrar pela primeira vez.',module:'Geral',tag:'ux',col:'todo',open:false},
-  {id:25,title:'Controle de planos no sistema (Solo/Pro/Equipe)',desc:'Gerenciar qual plano cada tenant está usando, com controle de limites e features por plano — alinhado com a landing page.',module:'Auth',tag:'arquitetura',col:'todo',open:false},
+  {id:25,title:'Perfil Gerente de Equipe',desc:'Terceiro nível de acesso além de admin e vendedor. O gerente vê a tonelagem e comissão consolidada de todos os vendedores do grupo, sem acesso a configurações administrativas.',module:'Auth',tag:'arquitetura',col:'todo',open:false},
 ];
-let state={cards:[],nextId:40,updated:null};
+let state={cards:[],nextId:50,updated:null};
 function load(){try{const r=localStorage.getItem(KEY);if(r){state=JSON.parse(r);}else{state.cards=DEFAULT;save(false);}}catch(e){state.cards=DEFAULT;}render();}
 function save(n=true){state.updated=new Date().toISOString();localStorage.setItem(KEY,JSON.stringify(state));updateMeta();if(n)toast('Salvo');}
 function updateMeta(){
