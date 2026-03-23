@@ -1,111 +1,85 @@
 <!DOCTYPE html>
+
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>RepFlow — Roadmap</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root {
-      --bg: #0C0F0A; --surface: #141710; --surface2: #1C2018;
-      --border: rgba(255,255,255,0.07); --border2: rgba(255,255,255,0.12);
-      --green: #7EE8A2; --green-dim: rgba(126,232,162,0.12); --green-dim2: rgba(126,232,162,0.2);
-      --text: #F0F2EC; --text2: #8A9080; --text3: #5A6052;
-      --orange: #FFAA5A; --orange-dim: rgba(255,170,90,0.12);
-      --blue: #7AB8F5; --blue-dim: rgba(122,184,245,0.12);
-      --red: #F5827A; --red-dim: rgba(245,130,122,0.12);
-      --purple: #C4A8F5; --purple-dim: rgba(196,168,245,0.12);
-      --teal: #7AF5E0; --teal-dim: rgba(122,245,224,0.12);
-    }
-    html { scroll-behavior: smooth; }
-    body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; overflow-x: hidden; }
-    body::before {
-      content: ''; position: fixed; inset: 0; z-index: 0;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
-      pointer-events: none; opacity: 0.4;
-    }
-    header {
-      position: relative; z-index: 10; padding: 40px 5% 32px;
-      border-bottom: 1px solid var(--border);
-      display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: 16px;
-    }
-    .logo { font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--green); margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
-    .logo-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); animation: pulse 2s ease-in-out infinite; }
-    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(0.8)} }
-    h1 { font-family: 'Syne', sans-serif; font-size: clamp(28px,5vw,44px); font-weight: 800; color: var(--text); letter-spacing: -1px; line-height: 1.1; }
-    h1 span { color: var(--green); }
-    .header-meta { font-size: 13px; color: var(--text3); margin-top: 8px; }
-    .stats-bar { position: relative; z-index: 10; display: flex; gap: 0; border-bottom: 1px solid var(--border); overflow-x: auto; }
-    .stat-item { padding: 16px 28px; border-right: 1px solid var(--border); min-width: 120px; flex-shrink: 0; }
-    .stat-item:last-child { border-right: none; }
-    .stat-num { font-family: 'Syne', sans-serif; font-size: 24px; font-weight: 700; color: var(--text); line-height: 1; }
-    .stat-label { font-size: 11px; color: var(--text3); margin-top: 4px; text-transform: uppercase; letter-spacing: 1px; }
-    main { position: relative; z-index: 10; padding: 32px 5%; }
-    .board-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; flex-wrap: wrap; gap: 12px; }
-    .board-title { font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--text3); }
-    .btn-add { font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; color: var(--green); background: var(--green-dim); border: 1px solid rgba(126,232,162,0.2); padding: 8px 18px; border-radius: 8px; cursor: pointer; transition: background 0.2s, border-color 0.2s; }
-    .btn-add:hover { background: var(--green-dim2); border-color: rgba(126,232,162,0.35); }
-    .columns { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
-    @media (max-width: 768px) { .columns { grid-template-columns: 1fr; } }
-    .col { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 16px; min-height: 300px; }
-    .col-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
-    .col-name { font-family: 'Syne', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--text3); }
-    .col-badge { font-size: 11px; padding: 2px 9px; border-radius: 20px; font-weight: 500; }
-    .col-badge-todo { background: var(--orange-dim); color: var(--orange); }
-    .col-badge-doing { background: var(--blue-dim); color: var(--blue); }
-    .col-badge-done { background: var(--green-dim); color: var(--green); }
-    .col-divider { height: 1px; background: var(--border); margin-bottom: 14px; }
-    .card { background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; margin-bottom: 10px; cursor: pointer; transition: border-color 0.2s, background 0.2s; animation: cardIn 0.3s ease both; }
-    @keyframes cardIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
-    .card:hover { border-color: var(--border2); background: #21261D; }
-    .card:last-child { margin-bottom: 0; }
-    .card-title { font-size: 13px; font-weight: 500; color: var(--text); line-height: 1.5; margin-bottom: 8px; }
-    .card-meta { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
-    .tag { font-size: 10px; font-weight: 500; padding: 2px 8px; border-radius: 20px; text-transform: uppercase; letter-spacing: 0.5px; }
-    .tag-ux { background: var(--purple-dim); color: var(--purple); }
-    .tag-performance { background: var(--teal-dim); color: var(--teal); }
-    .tag-seguranca { background: var(--orange-dim); color: var(--orange); }
-    .tag-urgente { background: var(--red-dim); color: var(--red); }
-    .tag-melhoria { background: var(--blue-dim); color: var(--blue); }
-    .tag-integracao { background: var(--green-dim); color: var(--green); }
-    .tag-arquitetura { background: rgba(196,168,245,0.2); color: var(--purple); }
-    .card-module { font-size: 10px; color: var(--text3); margin-left: auto; }
-    .card-body { display: none; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border); }
-    .card-body.open { display: block; }
-    .card-desc { font-size: 12px; color: var(--text2); line-height: 1.6; margin-bottom: 10px; }
-    .card-actions { display: flex; gap: 6px; flex-wrap: wrap; }
-    .btn-action { font-family: 'DM Sans', sans-serif; font-size: 11px; padding: 4px 10px; border-radius: 6px; cursor: pointer; border: 1px solid var(--border2); background: transparent; color: var(--text2); transition: color 0.15s, border-color 0.15s; }
-    .btn-action:hover { color: var(--text); border-color: rgba(255,255,255,0.25); }
-    .btn-action.danger { color: var(--red); border-color: rgba(245,130,122,0.2); }
-    .btn-action.danger:hover { border-color: rgba(245,130,122,0.4); }
-    .empty-col { font-size: 12px; color: var(--text3); text-align: center; padding: 32px 0; border: 1px dashed var(--border); border-radius: 8px; }
-    .overlay { display: none; position: fixed; inset: 0; z-index: 100; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px); align-items: center; justify-content: center; padding: 1rem; }
-    .overlay.open { display: flex; }
-    .modal { background: var(--surface); border: 1px solid var(--border2); border-radius: 16px; padding: 28px; width: 100%; max-width: 440px; animation: modalIn 0.2s ease; max-height: 90vh; overflow-y: auto; }
-    @keyframes modalIn { from{opacity:0;transform:scale(0.96) translateY(8px)} to{opacity:1;transform:scale(1) translateY(0)} }
-    .modal-title { font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 700; color: var(--text); margin-bottom: 20px; }
-    .form-row { margin-bottom: 14px; }
-    .form-row label { display: block; font-size: 11px; font-weight: 500; color: var(--text3); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
-    .form-row input, .form-row select, .form-row textarea { width: 100%; background: var(--surface2); border: 1px solid var(--border2); border-radius: 8px; padding: 9px 12px; font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--text); outline: none; transition: border-color 0.2s; }
-    .form-row input:focus, .form-row select:focus, .form-row textarea:focus { border-color: rgba(126,232,162,0.4); }
-    .form-row textarea { height: 80px; resize: vertical; }
-    .form-row select option { background: #1C2018; }
-    .modal-footer { display: flex; gap: 8px; justify-content: flex-end; margin-top: 20px; }
-    .btn-cancel { font-family: 'DM Sans', sans-serif; font-size: 13px; padding: 8px 18px; border-radius: 8px; cursor: pointer; background: transparent; border: 1px solid var(--border2); color: var(--text2); }
-    .btn-cancel:hover { color: var(--text); }
-    .btn-save { font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; padding: 8px 20px; border-radius: 8px; cursor: pointer; background: var(--green-dim2); border: 1px solid rgba(126,232,162,0.3); color: var(--green); transition: background 0.2s; }
-    .btn-save:hover { background: rgba(126,232,162,0.28); }
-    .toast { position: fixed; bottom: 24px; right: 24px; z-index: 200; font-size: 12px; background: var(--surface2); border: 1px solid var(--border2); border-radius: 8px; padding: 10px 16px; color: var(--green); opacity: 0; transform: translateY(8px); transition: opacity 0.2s, transform 0.2s; pointer-events: none; }
-    .toast.show { opacity: 1; transform: translateY(0); }
-    footer { position: relative; z-index: 10; padding: 24px 5%; border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
-    .footer-text { font-size: 12px; color: var(--text3); }
-    .footer-text span { color: var(--green); }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#0C0F0A;--surface:#141710;--surface2:#1C2018;--border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.12);--green:#7EE8A2;--green-dim:rgba(126,232,162,0.12);--green-dim2:rgba(126,232,162,0.2);--text:#F0F2EC;--text2:#8A9080;--text3:#5A6052;--orange:#FFAA5A;--orange-dim:rgba(255,170,90,0.12);--blue:#7AB8F5;--blue-dim:rgba(122,184,245,0.12);--red:#F5827A;--red-dim:rgba(245,130,122,0.12);--purple:#C4A8F5;--purple-dim:rgba(196,168,245,0.12);--teal:#7AF5E0;--teal-dim:rgba(122,245,224,0.12)}
+    html{scroll-behavior:smooth}
+    body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+    header{position:relative;z-index:10;padding:40px 5% 32px;border-bottom:1px solid var(--border);display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:16px}
+    .logo{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--green);margin-bottom:8px;display:flex;align-items:center;gap:8px}
+    .logo-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s ease-in-out infinite}
+    @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.5;transform:scale(0.8)}}
+    h1{font-family:'Syne',sans-serif;font-size:clamp(28px,5vw,44px);font-weight:800;color:var(--text);letter-spacing:-1px;line-height:1.1}
+    h1 span{color:var(--green)}
+    .header-meta{font-size:13px;color:var(--text3);margin-top:8px}
+    .stats-bar{position:relative;z-index:10;display:flex;border-bottom:1px solid var(--border);overflow-x:auto}
+    .stat-item{padding:16px 28px;border-right:1px solid var(--border);min-width:120px;flex-shrink:0}
+    .stat-item:last-child{border-right:none}
+    .stat-num{font-family:'Syne',sans-serif;font-size:24px;font-weight:700;color:var(--text);line-height:1}
+    .stat-label{font-size:11px;color:var(--text3);margin-top:4px;text-transform:uppercase;letter-spacing:1px}
+    main{position:relative;z-index:10;padding:32px 5%}
+    .board-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:12px}
+    .board-title{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text3)}
+    .btn-add{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;color:var(--green);background:var(--green-dim);border:1px solid rgba(126,232,162,0.2);padding:8px 18px;border-radius:8px;cursor:pointer}
+    .columns{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+    @media(max-width:768px){.columns{grid-template-columns:1fr}}
+    .col{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px;min-height:300px}
+    .col-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+    .col-name{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--text3)}
+    .col-badge{font-size:11px;padding:2px 9px;border-radius:20px;font-weight:500}
+    .col-badge-todo{background:var(--orange-dim);color:var(--orange)}
+    .col-badge-doing{background:var(--blue-dim);color:var(--blue)}
+    .col-badge-done{background:var(--green-dim);color:var(--green)}
+    .col-divider{height:1px;background:var(--border);margin-bottom:14px}
+    .card{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:10px;cursor:pointer;transition:border-color 0.2s,background 0.2s;animation:cardIn 0.3s ease both}
+    @keyframes cardIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+    .card:hover{border-color:var(--border2);background:#21261D}
+    .card-title{font-size:13px;font-weight:500;color:var(--text);line-height:1.5;margin-bottom:8px}
+    .card-meta{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+    .tag{font-size:10px;font-weight:500;padding:2px 8px;border-radius:20px;text-transform:uppercase;letter-spacing:0.5px}
+    .tag-ux{background:var(--purple-dim);color:var(--purple)}
+    .tag-performance{background:var(--teal-dim);color:var(--teal)}
+    .tag-seguranca{background:var(--orange-dim);color:var(--orange)}
+    .tag-urgente{background:var(--red-dim);color:var(--red)}
+    .tag-melhoria{background:var(--blue-dim);color:var(--blue)}
+    .tag-integracao{background:var(--green-dim);color:var(--green)}
+    .tag-arquitetura{background:rgba(196,168,245,0.2);color:var(--purple)}
+    .tag-ia{background:rgba(122,245,224,0.15);color:var(--teal)}
+    .card-module{font-size:10px;color:var(--text3);margin-left:auto}
+    .card-body{display:none;margin-top:10px;padding-top:10px;border-top:1px solid var(--border)}
+    .card-body.open{display:block}
+    .card-desc{font-size:12px;color:var(--text2);line-height:1.6;margin-bottom:10px}
+    .card-actions{display:flex;gap:6px;flex-wrap:wrap}
+    .btn-action{font-family:'DM Sans',sans-serif;font-size:11px;padding:4px 10px;border-radius:6px;cursor:pointer;border:1px solid var(--border2);background:transparent;color:var(--text2)}
+    .btn-action.danger{color:var(--red);border-color:rgba(245,130,122,0.2)}
+    .empty-col{font-size:12px;color:var(--text3);text-align:center;padding:32px 0;border:1px dashed var(--border);border-radius:8px}
+    .overlay{display:none;position:fixed;inset:0;z-index:100;background:rgba(0,0,0,0.7);backdrop-filter:blur(4px);align-items:center;justify-content:center;padding:1rem}
+    .overlay.open{display:flex}
+    .modal{background:var(--surface);border:1px solid var(--border2);border-radius:16px;padding:28px;width:100%;max-width:440px;max-height:90vh;overflow-y:auto;animation:modalIn 0.2s ease}
+    @keyframes modalIn{from{opacity:0;transform:scale(0.96) translateY(8px)}to{opacity:1;transform:scale(1) translateY(0)}}
+    .modal-title{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;color:var(--text);margin-bottom:20px}
+    .form-row{margin-bottom:14px}
+    .form-row label{display:block;font-size:11px;font-weight:500;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+    .form-row input,.form-row select,.form-row textarea{width:100%;background:var(--surface2);border:1px solid var(--border2);border-radius:8px;padding:9px 12px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text);outline:none}
+    .form-row textarea{height:80px;resize:vertical}
+    .form-row select option{background:#1C2018}
+    .modal-footer{display:flex;gap:8px;justify-content:flex-end;margin-top:20px}
+    .btn-cancel{font-family:'DM Sans',sans-serif;font-size:13px;padding:8px 18px;border-radius:8px;cursor:pointer;background:transparent;border:1px solid var(--border2);color:var(--text2)}
+    .btn-save{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;padding:8px 20px;border-radius:8px;cursor:pointer;background:var(--green-dim2);border:1px solid rgba(126,232,162,0.3);color:var(--green)}
+    .toast{position:fixed;bottom:24px;right:24px;z-index:200;font-size:12px;background:var(--surface2);border:1px solid var(--border2);border-radius:8px;padding:10px 16px;color:var(--green);opacity:0;transform:translateY(8px);transition:opacity 0.2s,transform 0.2s;pointer-events:none}
+    .toast.show{opacity:1;transform:translateY(0)}
+    footer{position:relative;z-index:10;padding:24px 5%;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+    .footer-text{font-size:12px;color:var(--text3)}
+    .footer-text span{color:var(--green)}
   </style>
 </head>
 <body>
-
 <header>
   <div>
     <div class="logo"><div class="logo-dot"></div>RepFlow</div>
@@ -114,48 +88,41 @@
   </div>
   <button class="btn-add" onclick="openModal()">+ Nova tarefa</button>
 </header>
-
 <div class="stats-bar">
   <div class="stat-item"><div class="stat-num" id="stat-total">—</div><div class="stat-label">Total</div></div>
   <div class="stat-item"><div class="stat-num" id="stat-todo" style="color:var(--orange)">—</div><div class="stat-label">A fazer</div></div>
   <div class="stat-item"><div class="stat-num" id="stat-doing" style="color:var(--blue)">—</div><div class="stat-label">Em progresso</div></div>
   <div class="stat-item"><div class="stat-num" id="stat-done" style="color:var(--green)">—</div><div class="stat-label">Concluído</div></div>
 </div>
-
 <main>
-  <div class="board-header">
-    <span class="board-title">Tarefas & melhorias</span>
-  </div>
+  <div class="board-header"><span class="board-title">Tarefas & melhorias</span></div>
   <div class="columns" id="board"></div>
 </main>
-
 <footer>
   <span class="footer-text">RepFlow — Uso pessoal · <span>Rubens Bandeira</span></span>
   <span class="footer-text">Feito em Recife, PE 🌿</span>
 </footer>
-
 <div class="overlay" id="overlay">
   <div class="modal">
     <div class="modal-title">Nova tarefa</div>
     <div class="form-row"><label>Título</label><input type="text" id="f-title" placeholder="Ex: Adicionar paginação nos pedidos" /></div>
     <div class="form-row"><label>Descrição</label><textarea id="f-desc" placeholder="Detalhes, contexto..."></textarea></div>
-    <div class="form-row">
-      <label>Módulo</label>
+    <div class="form-row"><label>Módulo</label>
       <select id="f-module">
         <option value="Pedidos">Pedidos</option><option value="Dashboard">Dashboard</option>
         <option value="Comissões">Comissões</option><option value="Metas">Metas</option>
         <option value="Clientes">Clientes</option><option value="Materiais">Materiais</option>
         <option value="NF">Notas Fiscais</option><option value="Auth">Auth / Segurança</option>
-        <option value="Infra">Infra</option><option value="Geral">Geral</option>
+        <option value="Infra">Infra</option><option value="IA">IA & Alertas</option>
+        <option value="Geral">Geral</option>
       </select>
     </div>
-    <div class="form-row">
-      <label>Categoria</label>
+    <div class="form-row"><label>Categoria</label>
       <select id="f-tag">
         <option value="melhoria">Melhoria</option><option value="urgente">Urgente</option>
         <option value="seguranca">Segurança</option><option value="performance">Performance</option>
         <option value="ux">UX</option><option value="integracao">Integração</option>
-        <option value="arquitetura">Arquitetura</option>
+        <option value="arquitetura">Arquitetura</option><option value="ia">IA</option>
       </select>
     </div>
     <div class="modal-footer">
@@ -164,168 +131,74 @@
     </div>
   </div>
 </div>
-
 <div class="toast" id="toast"></div>
-
 <script>
-const COLS = ['A fazer', 'Em progresso', 'Feito'];
-const COL_IDS = ['todo', 'doing', 'done'];
-const KEY = 'repflow-roadmap-v2';
-
-const DEFAULT = [
-  // BUGS
-  { id: 1, title: 'Trocar senha padrão do admin', desc: 'A variável TroqueEssaSenha@2026 precisa ser rotacionada em produção imediatamente.', module: 'Auth', tag: 'seguranca', col: 'todo', open: false },
-  { id: 2, title: 'Logo duplicada na tela de login', desc: 'Tela de login exibe duas logos empilhadas — uma menor em cima e uma maior embaixo. Bug visual no componente de login.', module: 'Geral', tag: 'urgente', col: 'todo', open: false },
-  { id: 3, title: 'Valor fantasma de R$ 895,39 no Dashboard', desc: 'Valor aparecendo no "a receber" do Dashboard sem origem identificada. Verificar cálculo de comissões pendentes.', module: 'Dashboard', tag: 'urgente', col: 'todo', open: false },
-  { id: 4, title: 'Divergência de tonelagem: Metas x Dashboard', desc: 'Metas exibe 74,47 ton realizado, Dashboard exibe apenas 66,10 ton. Provável problema de competência fiscal no cálculo.', module: 'Dashboard', tag: 'urgente', col: 'todo', open: false },
-  // PERFORMANCE
-  { id: 5, title: 'Paginação na tabela de Pedidos', desc: 'Todos os registros são carregados de uma vez. Pode impactar performance com volume alto de dados.', module: 'Pedidos', tag: 'performance', col: 'todo', open: false },
-  { id: 6, title: 'Paginação na lista de Usuários', desc: 'Mesmo problema da tabela de Pedidos — sem paginação.', module: 'Auth', tag: 'performance', col: 'todo', open: false },
-  { id: 7, title: 'Mover lógica de status ATRASADO para o backend', desc: 'Atualmente calculado no cliente — risco de inconsistência se a lógica de datas divergir.', module: 'Pedidos', tag: 'melhoria', col: 'todo', open: false },
-  // UX / MELHORIAS
-  { id: 8, title: 'Tela de cold start amigável', desc: 'Ao invés de parecer erro, exibir uma tela "aguarde, sistema iniciando..." durante o cold start do Render free tier.', module: 'Infra', tag: 'ux', col: 'todo', open: false },
-  { id: 9, title: 'Upgrade do Render para plano pago', desc: 'Cold start de ~30s no free tier prejudica experiência. Render pago (~$7/mês) elimina o problema.', module: 'Infra', tag: 'ux', col: 'todo', open: false },
-  { id: 10, title: 'Nome fantasia nos clientes', desc: 'Exibir nome fantasia como identificação principal do cliente, mantendo razão social salva. Melhora muito a leitura nas listas e pedidos.', module: 'Clientes', tag: 'ux', col: 'todo', open: false },
-  // FUNCIONALIDADES NOVAS
-  { id: 11, title: 'Exportar pedidos em PDF por período', desc: 'Opção de imprimir/exportar PDF dos pedidos ao selecionar intervalo de datas.', module: 'Pedidos', tag: 'melhoria', col: 'todo', open: false },
-  { id: 12, title: 'Exportar comissões em PDF', desc: 'Além do Excel já existente, adicionar exportação em PDF para impressão do relatório de comissões.', module: 'Comissões', tag: 'melhoria', col: 'todo', open: false },
-  { id: 13, title: 'Leitura de NF pela câmera', desc: 'Ler a chave de acesso da DANFE pela câmera do celular (OCR ou leitor de código de barras). Ao identificar o CNPJ, filtrar automaticamente os pedidos do cliente para vincular à NF.', module: 'NF', tag: 'melhoria', col: 'todo', open: false },
-  { id: 14, title: 'Match automático produto NF x catálogo', desc: 'Ao ler a NF, identificar o código do produto (ex: 271031200) e fazer match com o catálogo interno ignorando sufixos -cx/-ch/-sawer.', module: 'NF', tag: 'melhoria', col: 'todo', open: false },
-  { id: 15, title: 'Dimensões no cadastro de materiais', desc: 'Adicionar campos de comprimento, largura e altura interna no cadastro de produtos do catálogo FE.', module: 'Materiais', tag: 'melhoria', col: 'todo', open: false },
-  { id: 16, title: 'Qualidade/gramatura no cadastro de materiais', desc: 'Adicionar campo de qualidade/gramatura (ex: 739 PB2C1M45) no catálogo. Informação muito consultada pelo representante em campo.', module: 'Materiais', tag: 'melhoria', col: 'todo', open: false },
-  { id: 17, title: 'Histórico de pedidos na ficha do cliente', desc: 'Dentro da ficha do cliente, exibir todos os pedidos anteriores, frequência de compra e data da última compra.', module: 'Clientes', tag: 'melhoria', col: 'todo', open: false },
-  { id: 18, title: 'Alerta de clientes inativos', desc: 'Destacar no dashboard clientes que não compram há X dias configuráveis.', module: 'Dashboard', tag: 'melhoria', col: 'todo', open: false },
-  { id: 19, title: 'Export geral dos dados (backup)', desc: 'Antes de virar multi-tenant, garantir que o usuário consegue exportar todos os seus dados em formato portátil.', module: 'Geral', tag: 'seguranca', col: 'todo', open: false },
-  // SAAS / ARQUITETURA
-  { id: 20, title: 'Multi-tenancy — transformar em SaaS', desc: 'Maior evolução do sistema: cada representante assinante terá seu próprio espaço isolado de dados. Você vira o primeiro cliente pagante. Exige mudança de arquitetura no backend (MongoDB por tenant ou schema separation).', module: 'Infra', tag: 'arquitetura', col: 'todo', open: false },
-  { id: 21, title: 'Onboarding guiado para novos usuários', desc: 'Wizard para novos representantes cadastrarem as primeiras representadas e clientes ao entrar pela primeira vez.', module: 'Geral', tag: 'ux', col: 'todo', open: false },
-  { id: 22, title: 'Controle de planos no sistema (Solo/Pro/Equipe)', desc: 'Gerenciar qual plano cada tenant está usando, com controle de limites e features por plano — alinhado com a landing page.', module: 'Auth', tag: 'arquitetura', col: 'todo', open: false },
+const COLS=['A fazer','Em progresso','Feito'],COL_IDS=['todo','doing','done'],KEY='repflow-roadmap-v3';
+const DEFAULT=[
+  {id:1,title:'Trocar senha padrão do admin',desc:'A variável TroqueEssaSenha@2026 precisa ser rotacionada em produção imediatamente.',module:'Auth',tag:'seguranca',col:'todo',open:false},
+  {id:2,title:'Logo duplicada na tela de login',desc:'Tela de login exibe duas logos empilhadas — uma menor em cima e uma maior embaixo.',module:'Geral',tag:'urgente',col:'todo',open:false},
+  {id:3,title:'Valor fantasma de R$ 895,39 no Dashboard',desc:'Valor aparecendo no "a receber" sem origem identificada. Verificar cálculo de comissões pendentes.',module:'Dashboard',tag:'urgente',col:'todo',open:false},
+  {id:4,title:'Divergência de tonelagem: Metas x Dashboard',desc:'Metas exibe 74,47 ton realizado, Dashboard exibe apenas 66,10 ton. Provável problema de competência fiscal.',module:'Dashboard',tag:'urgente',col:'todo',open:false},
+  {id:5,title:'Paginação na tabela de Pedidos',desc:'Todos os registros carregados de uma vez. Pode impactar performance com volume alto.',module:'Pedidos',tag:'performance',col:'todo',open:false},
+  {id:6,title:'Paginação na lista de Usuários',desc:'Mesmo problema da tabela de Pedidos — sem paginação.',module:'Auth',tag:'performance',col:'todo',open:false},
+  {id:7,title:'Mover lógica de status ATRASADO para o backend',desc:'Atualmente calculado no cliente — risco de inconsistência se a lógica de datas divergir.',module:'Pedidos',tag:'melhoria',col:'todo',open:false},
+  {id:8,title:'Tela de cold start amigável',desc:'Exibir "aguarde, sistema iniciando..." ao invés de parecer erro durante o cold start do Render free tier.',module:'Infra',tag:'ux',col:'todo',open:false},
+  {id:9,title:'Upgrade do Render para plano pago',desc:'Cold start de ~30s no free tier prejudica a experiência. Render pago (~$7/mês) elimina o problema.',module:'Infra',tag:'ux',col:'todo',open:false},
+  {id:10,title:'Nome fantasia nos clientes',desc:'Exibir nome fantasia como identificação principal, mantendo razão social salva. Melhora a leitura nas listas e pedidos.',module:'Clientes',tag:'ux',col:'todo',open:false},
+  {id:11,title:'Exportar pedidos em PDF por período',desc:'Opção de imprimir/exportar PDF dos pedidos ao selecionar intervalo de datas.',module:'Pedidos',tag:'melhoria',col:'todo',open:false},
+  {id:12,title:'Exportar comissões em PDF',desc:'Além do Excel já existente, adicionar exportação em PDF para impressão do relatório de comissões.',module:'Comissões',tag:'melhoria',col:'todo',open:false},
+  {id:13,title:'Leitura de NF pela câmera',desc:'Ler a chave de acesso da DANFE pela câmera do celular. Ao identificar o CNPJ, filtrar automaticamente os pedidos do cliente para vincular à NF.',module:'NF',tag:'melhoria',col:'todo',open:false},
+  {id:14,title:'Match automático produto NF x catálogo',desc:'Ao ler a NF, fazer match do código do produto (ex: 271031200) com o catálogo interno ignorando sufixos -cx/-ch/-sawer.',module:'NF',tag:'melhoria',col:'todo',open:false},
+  {id:15,title:'Dimensões no cadastro de materiais',desc:'Adicionar campos de comprimento, largura e altura interna no cadastro de produtos do catálogo FE.',module:'Materiais',tag:'melhoria',col:'todo',open:false},
+  {id:16,title:'Qualidade/gramatura no cadastro de materiais',desc:'Adicionar campo de qualidade/gramatura (ex: 739 PB2C1M45). Informação muito consultada pelo representante em campo.',module:'Materiais',tag:'melhoria',col:'todo',open:false},
+  {id:17,title:'Histórico de pedidos na ficha do cliente',desc:'Exibir todos os pedidos anteriores, frequência de compra e data da última compra dentro da ficha do cliente.',module:'Clientes',tag:'melhoria',col:'todo',open:false},
+  {id:18,title:'Alerta de clientes inativos no Dashboard',desc:'Destacar no dashboard clientes que não compram há X dias configuráveis.',module:'Dashboard',tag:'melhoria',col:'todo',open:false},
+  {id:19,title:'Export geral dos dados (backup)',desc:'Garantir que o usuário consegue exportar todos os seus dados antes de virar multi-tenant.',module:'Geral',tag:'seguranca',col:'todo',open:false},
+  {id:20,title:'IA — Resumo diário de entregas (7h)',desc:'Todo dia às 7h, enviar mensagem via WhatsApp ou e-mail com quantos pedidos têm entrega prevista para o dia e link direto para o sistema. Ex: "Bom dia Rubens, você tem 3 pedidos para entregar hoje."',module:'IA',tag:'ia',col:'todo',open:false},
+  {id:21,title:'IA — Alerta de clientes sem pedido há X dias',desc:'Notificar quando um cliente está há X dias (configurável) sem realizar pedido, sugerindo contato direto. Ex: "Copobras está há 45 dias sem pedido — que tal uma ligada?"',module:'IA',tag:'ia',col:'todo',open:false},
+  {id:22,title:'IA — Alerta de ritmo de metas',desc:'Notificar quando o ritmo está abaixo do necessário para bater a meta do mês. Ex: "Faltam 8 dias para fechar agosto e você está a 20% da meta. Você precisa de X ton nos próximos 8 dias."',module:'IA',tag:'ia',col:'todo',open:false},
+  {id:23,title:'Multi-tenancy — transformar em SaaS',desc:'Cada representante assinante terá seu próprio espaço isolado de dados. Você vira o primeiro cliente pagante. Exige mudança de arquitetura no backend.',module:'Infra',tag:'arquitetura',col:'todo',open:false},
+  {id:24,title:'Onboarding guiado para novos usuários',desc:'Wizard para novos representantes cadastrarem as primeiras representadas e clientes ao entrar pela primeira vez.',module:'Geral',tag:'ux',col:'todo',open:false},
+  {id:25,title:'Controle de planos no sistema (Solo/Pro/Equipe)',desc:'Gerenciar qual plano cada tenant está usando, com controle de limites e features por plano — alinhado com a landing page.',module:'Auth',tag:'arquitetura',col:'todo',open:false},
 ];
-
-let state = { cards: [], nextId: 30, updated: null };
-
-function load() {
-  try {
-    const raw = localStorage.getItem(KEY);
-    if (raw) {
-      state = JSON.parse(raw);
-    } else {
-      state.cards = DEFAULT;
-      save(false);
-    }
-  } catch(e) { state.cards = DEFAULT; }
-  render();
+let state={cards:[],nextId:40,updated:null};
+function load(){try{const r=localStorage.getItem(KEY);if(r){state=JSON.parse(r);}else{state.cards=DEFAULT;save(false);}}catch(e){state.cards=DEFAULT;}render();}
+function save(n=true){state.updated=new Date().toISOString();localStorage.setItem(KEY,JSON.stringify(state));updateMeta();if(n)toast('Salvo');}
+function updateMeta(){
+  const el=document.getElementById('last-updated');
+  if(state.updated){const d=new Date(state.updated);el.textContent='Atualizado em '+d.toLocaleDateString('pt-BR')+' às '+d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});}
+  document.getElementById('stat-total').textContent=state.cards.length;
+  document.getElementById('stat-todo').textContent=state.cards.filter(c=>c.col==='todo').length;
+  document.getElementById('stat-doing').textContent=state.cards.filter(c=>c.col==='doing').length;
+  document.getElementById('stat-done').textContent=state.cards.filter(c=>c.col==='done').length;
 }
-
-function save(notify = true) {
-  state.updated = new Date().toISOString();
-  localStorage.setItem(KEY, JSON.stringify(state));
-  updateMeta();
-  if (notify) toast('Salvo');
-}
-
-function updateMeta() {
-  const el = document.getElementById('last-updated');
-  if (state.updated) {
-    const d = new Date(state.updated);
-    el.textContent = 'Atualizado em ' + d.toLocaleDateString('pt-BR') + ' às ' + d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-  }
-  document.getElementById('stat-total').textContent = state.cards.length;
-  document.getElementById('stat-todo').textContent = state.cards.filter(c => c.col === 'todo').length;
-  document.getElementById('stat-doing').textContent = state.cards.filter(c => c.col === 'doing').length;
-  document.getElementById('stat-done').textContent = state.cards.filter(c => c.col === 'done').length;
-}
-
-function render() {
-  const board = document.getElementById('board');
-  board.innerHTML = '';
-  COL_IDS.forEach((colId, i) => {
-    const colCards = state.cards.filter(c => c.col === colId);
-    const badgeClass = ['col-badge-todo', 'col-badge-doing', 'col-badge-done'][i];
-    const col = document.createElement('div');
-    col.className = 'col';
-    col.innerHTML = `
-      <div class="col-header">
-        <span class="col-name">${COLS[i]}</span>
-        <span class="col-badge ${badgeClass}">${colCards.length}</span>
-      </div>
-      <div class="col-divider"></div>
-      ${colCards.length === 0
-        ? '<div class="empty-col">Nenhuma tarefa aqui</div>'
-        : colCards.map(c => `
-        <div class="card" onclick="toggle(${c.id})">
-          <div class="card-title">${c.title}</div>
-          <div class="card-meta">
-            <span class="tag tag-${c.tag}">${c.tag}</span>
-            <span class="card-module">${c.module}</span>
-          </div>
-          <div class="card-body ${c.open ? 'open' : ''}">
-            ${c.desc ? `<div class="card-desc">${c.desc}</div>` : ''}
-            <div class="card-actions">
-              ${colId !== 'todo' ? `<button class="btn-action" onclick="move(event,${c.id},'prev')">← Voltar</button>` : ''}
-              ${colId !== 'done' ? `<button class="btn-action" onclick="move(event,${c.id},'next')">Avançar →</button>` : ''}
-              <button class="btn-action danger" onclick="remove(event,${c.id})">Remover</button>
-            </div>
-          </div>
-        </div>`).join('')}
-    `;
+function render(){
+  const board=document.getElementById('board');board.innerHTML='';
+  COL_IDS.forEach((colId,i)=>{
+    const cc=state.cards.filter(c=>c.col===colId);
+    const bc=['col-badge-todo','col-badge-doing','col-badge-done'][i];
+    const col=document.createElement('div');col.className='col';
+    col.innerHTML='<div class="col-header"><span class="col-name">'+COLS[i]+'</span><span class="col-badge '+bc+'">'+cc.length+'</span></div><div class="col-divider"></div>'+
+    (cc.length===0?'<div class="empty-col">Nenhuma tarefa aqui</div>':cc.map(c=>
+      '<div class="card" onclick="toggle('+c.id+')"><div class="card-title">'+c.title+'</div>'+
+      '<div class="card-meta"><span class="tag tag-'+c.tag+'">'+c.tag+'</span><span class="card-module">'+c.module+'</span></div>'+
+      '<div class="card-body '+(c.open?'open':'')+'">'+
+      (c.desc?'<div class="card-desc">'+c.desc+'</div>':'')+
+      '<div class="card-actions">'+
+      (colId!=='todo'?'<button class="btn-action" onclick="move(event,'+c.id+',\'prev\')">← Voltar</button>':'')+
+      (colId!=='done'?'<button class="btn-action" onclick="move(event,'+c.id+',\'next\')">Avançar →</button>':'')+
+      '<button class="btn-action danger" onclick="remove(event,'+c.id+')">Remover</button>'+
+      '</div></div></div>').join(''));
     board.appendChild(col);
-  });
-  updateMeta();
+  });updateMeta();
 }
-
-function toggle(id) {
-  state.cards = state.cards.map(c => c.id === id ? { ...c, open: !c.open } : c);
-  render();
-}
-
-function move(e, id, dir) {
-  e.stopPropagation();
-  const idx = COL_IDS.indexOf(state.cards.find(c => c.id === id).col);
-  const ni = dir === 'next' ? idx + 1 : idx - 1;
-  if (ni < 0 || ni >= COL_IDS.length) return;
-  state.cards = state.cards.map(c => c.id === id ? { ...c, col: COL_IDS[ni], open: false } : c);
-  render(); save();
-}
-
-function remove(e, id) {
-  e.stopPropagation();
-  if (!confirm('Remover esta tarefa?')) return;
-  state.cards = state.cards.filter(c => c.id !== id);
-  render(); save();
-}
-
-function openModal() { document.getElementById('overlay').classList.add('open'); }
-
-function closeModal() {
-  document.getElementById('overlay').classList.remove('open');
-  document.getElementById('f-title').value = '';
-  document.getElementById('f-desc').value = '';
-}
-
-function addCard() {
-  const title = document.getElementById('f-title').value.trim();
-  if (!title) return;
-  state.cards.push({
-    id: state.nextId++,
-    title,
-    desc: document.getElementById('f-desc').value.trim(),
-    module: document.getElementById('f-module').value,
-    tag: document.getElementById('f-tag').value,
-    col: 'todo', open: false
-  });
-  closeModal(); render(); save();
-}
-
-let toastTimer;
-function toast(msg) {
-  const el = document.getElementById('toast');
-  el.textContent = msg;
-  el.classList.add('show');
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => el.classList.remove('show'), 2000);
-}
-
+function toggle(id){state.cards=state.cards.map(c=>c.id===id?{...c,open:!c.open}:c);render();}
+function move(e,id,dir){e.stopPropagation();const idx=COL_IDS.indexOf(state.cards.find(c=>c.id===id).col);const ni=dir==='next'?idx+1:idx-1;if(ni<0||ni>=COL_IDS.length)return;state.cards=state.cards.map(c=>c.id===id?{...c,col:COL_IDS[ni],open:false}:c);render();save();}
+function remove(e,id){e.stopPropagation();if(!confirm('Remover esta tarefa?'))return;state.cards=state.cards.filter(c=>c.id!==id);render();save();}
+function openModal(){document.getElementById('overlay').classList.add('open');}
+function closeModal(){document.getElementById('overlay').classList.remove('open');document.getElementById('f-title').value='';document.getElementById('f-desc').value='';}
+function addCard(){const t=document.getElementById('f-title').value.trim();if(!t)return;state.cards.push({id:state.nextId++,title:t,desc:document.getElementById('f-desc').value.trim(),module:document.getElementById('f-module').value,tag:document.getElementById('f-tag').value,col:'todo',open:false});closeModal();render();save();}
+let tt;function toast(msg){const el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>el.classList.remove('show'),2000);}
 load();
 </script>
 </body>
