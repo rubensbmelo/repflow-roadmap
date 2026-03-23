@@ -162,6 +162,8 @@ const DEFAULT=[
   {id:4,title:'Divergência de tonelagem: Metas x Dashboard',desc:'Metas exibe 74,47 ton realizado, Dashboard exibe apenas 66,10 ton. Provável problema de competência fiscal.',module:'Dashboard',tag:'urgente',col:'alta',open:false},
   {id:7,title:'Mover lógica de status ATRASADO para o backend',desc:'Atualmente calculado no cliente — risco de inconsistência se a lógica de datas divergir.',module:'Pedidos',tag:'melhoria',col:'alta',open:false},
   {id:30,title:'Mover regras de comissão para o servidor',desc:'Isolar a lógica de cálculo de comissão e preços em funções de servidor (backend FastAPI), impedindo que alguém manipule valores pelo console do navegador.',module:'Infra',tag:'seguranca',col:'alta',open:false},
+  {id:33,title:'Double submit ao criar pedido SALDO',desc:'Ao registrar entrega parcial, o botão de criar saldo pode disparar a requisição duas vezes, gerando pedidos duplicados (ex: 58168-S1 apareceu em duplicata). Corrigir com debounce/disable no botão + verificação de idempotência no backend.',module:'Pedidos',tag:'urgente',col:'alta',open:false},
+  {id:34,title:'Auditoria geral de duplicidades no sistema',desc:'Varrer Pedidos, Metas e Notas Fiscais em busca de registros duplicados. Verificar se o problema de double submit afeta outros módulos além de pedidos SALDO. Criar validação de unicidade no backend para os campos-chave de cada entidade.',module:'Geral',tag:'urgente',col:'alta',open:false},
 
   // ─── MÉDIA: melhorias importantes pro dia a dia ────────────────────────────
   {id:5,title:'Paginação na tabela de Pedidos',desc:'Todos os registros carregados de uma vez. Pode impactar performance com volume alto.',module:'Pedidos',tag:'performance',col:'media',open:false},
